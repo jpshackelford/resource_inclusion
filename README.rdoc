@@ -1,0 +1,126 @@
+== Resource Inclusion
+
+Resource Inclusion uses the power of Responders in Rails 3 to enable a macro
+for specifying that resources rendered as xml or json include associated 
+resources. This may be used in conjunction with Inherited Resources to keep your
+controllers lean and mean.
+
+Given a model such as:
+
+    create_table :users do |t|
+      t.string  :login_id
+      t.string  :display_name    
+      t.string  :email
+    end
+
+    create_table :comments do |t|
+      t.text       :text
+      t.references :user
+    end
+    
+Our CommentsController need only have the following to include the user's 
+attributes:
+
+   class CommentsController < ApplicationController
+     
+     inherit_resources
+       
+     include_resources :user
+         
+     #  If you like to type, you could have written the following, but you still
+     #  would lack the behavior for other actions which return the resources.
+     #    
+     #  def index 
+     #    index! do |format|
+     #      format.xml{  render :xml  => collection.to_xml(  render_options ) }
+     #      format.json{ render :json => collection.to_json( render_options ) }        
+     #    end
+     #  end
+     #  
+     #  def show
+     #    show! do |format|
+     #      format.xml{ render :xml  => resource.to_xml(  render_options ) }
+     #      format.xml{ render :json => resource.to_json( render_options ) }
+     #    end
+     #  end
+     #
+     #  def render_options
+     #    { :include => [:user] }
+     #  end
+     #
+     
+   end
+
+Thus /comments/1.xml would render:
+
+    <?xml version="1.0" encoding="UTF-8"?> 
+    <comment> 
+      <id type="integer">1</id> 
+      <text>This is comment text.</text> 
+      <user-id type="integer">1</user-id> 
+      <user> 
+        <login-id>aperson</login-id> 
+        <display-name>A. Person</display-name> 
+        <email>a.person@somedomain.com</email> 
+        <id type="integer">1</id> 
+      </user> 
+    </comment> 
+
+The output for the json format would be analogous.
+
+== Installation
+
+Resource Inclusion requires Rails 3.
+
+You can let bundler to install Resource Inclusion by adding this line to your application's Gemfile:
+
+  gem 'resource_inclusion', '0.0.1'
+
+And then execute:
+
+  bundle install 
+
+Add resource_inclusion to your app/controllers/application_controller.rb file (or
+to any of your other controllers):
+   
+   class ApplicationController < ActionController::Base
+   
+      resource_inclusion
+      
+   end
+
+Then use the macro to your controllers as shown above.
+
+== Limitations
+
+In this release of Resource Inclusion the macros support no configuration 
+options beyond what you can pass to serializer (#to_xml or #to_json) with the
+:include option. These options will be passed to the serializer for any action
+that uses ActionController#respond_with and with all formats, excluding HTML. 
+
+For more on #respond_with see:
+* http://apidock.com/rails/ActionController/MimeResponds/respond_with
+* http://davidwparker.com/2010/03/09/api-in-rails-respond-to-and-respond-with/
+* http://railscasts.com/episodes/224-controllers-in-rails-3
+
+Note that this plug-in has no dependency on Inherited Resources and should work
+just fine without it. That said, I have not tested with in an application
+which doesn't use Inherited Resources so I'll be interested in feedback from
+users.
+
+== Acknowledgments
+
+Thanks to Jose Valim for pointing me in the right direction and his must-have
+Inherit Resources plug-in. If are on Rails 3, wish to expose an REST API and are 
+not using this plug-in, you probably writing more code than you should be. See:
+
+* https://github.com/josevalim/inherited_resources
+
+== Bugs and Feedback
+
+Feedback is welcome. If you discover any bugs or want to drop a line, file 
+issues on GitHub or contact me personally via GitHub.
+
+Copyright (c) 2010 John-Mason P. Shackelford
+
+See the attached MIT License.
