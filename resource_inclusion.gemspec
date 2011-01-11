@@ -45,15 +45,12 @@ Gem::Specification.new do |s|
     "test/app/config/routes.rb",
     "test/app/db/development.sqlite3",
     "test/app/db/migrate/20110111090943_initial_test.rb",
-    "test/app/db/schema.rb",
     "test/app/db/test.sqlite3",
     "test/app/log/development.log",
     "test/app/log/test.log",
     "test/app/spec/controllers/comments_controller_spec.rb",
     "test/app/spec/spec_helper.rb",
-    "test/app/spec/support/xpath_matcher.rb",
-    "test/base_test.rb",
-    "test/test_helper.rb"
+    "test/app/spec/support/xpath_matcher.rb"
   ]
   s.homepage = %q{http://github.com/jpshackelford/resource_inclusion}
   s.require_paths = ["lib"]
@@ -70,12 +67,9 @@ Gem::Specification.new do |s|
     "test/app/config/environments/test.rb",
     "test/app/config/routes.rb",
     "test/app/db/migrate/20110111090943_initial_test.rb",
-    "test/app/db/schema.rb",
     "test/app/spec/controllers/comments_controller_spec.rb",
     "test/app/spec/spec_helper.rb",
-    "test/app/spec/support/xpath_matcher.rb",
-    "test/base_test.rb",
-    "test/test_helper.rb"
+    "test/app/spec/support/xpath_matcher.rb"
   ]
 
   if s.respond_to? :specification_version then
